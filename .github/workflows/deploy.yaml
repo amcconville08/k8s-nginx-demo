@@ -1,0 +1,25 @@
+name: Deploy to K3s
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  apply-manifests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
+
+    - name: Apply Manifests
+      run: |
+        kubectl apply -f nginx-pv-pvc.yaml
+        kubectl apply -f nginx-deploy.yaml
+        kubectl apply -f nginx-ingress.yaml
+        kubectl apply -f nginx-metrics-config.yaml
