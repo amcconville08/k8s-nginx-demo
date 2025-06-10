@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nginx-html-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""   # Remove dynamic binding
+  hostPath:
+    path: /mount/2tbdrive/nginx-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-html-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""   # Remove dynamic binding requirement
+  resources:
+    requests:
+      storage: 1Gi
